@@ -5,7 +5,7 @@ services:
     container_name: backend
     image: backend
     build:
-      context: ./
+      context: ./config/
       dockerfile: Dockerfile
     command: >
       sh -c "python manage.py makemigrations &&
@@ -13,7 +13,7 @@ services:
       python manage.py collectstatic --no-input &&
       python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - .:/app
+      - ./config:/app
     ports:
       - "8000:8000"
     environment:
@@ -53,11 +53,11 @@ services:
     container_name: celery
     image: celery
     build:
-      context: .
+      context: ./config/
       dockerfile: Dockerfile
     command: sh -c "celery -A config worker -l INFO"
     volumes:
-      - .:/app
+      - ./config:/app
     environment:
       - SECRET_KEY=test
       - DEBUG=True
@@ -76,11 +76,11 @@ services:
     container_name: celery_beat
     image: celery_beat
     build:
-      context: .
+      context: ./config/
       dockerfile: Dockerfile
     command: sh -c "celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
     volumes:
-      - .:/app
+      - ./config:/app
     environment:
       - SECRET_KEY=test
       - DEBUG=True

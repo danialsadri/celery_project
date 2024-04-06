@@ -1,8 +1,8 @@
-/static/
+/config/static/
 /static
 .static
-/**/workspace.xml
 .idea
+/.idea/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
