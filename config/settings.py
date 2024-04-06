@@ -8,11 +8,12 @@ DEBUG = os.environ.get('DEBUG')
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
 
 LOCAL_APPS = [
-
+    'notifications.apps.NotificationsConfig',
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework',
+    'django_celery_beat',
 ]
 
 INSTALLED_APPS = [
@@ -92,3 +93,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ROOT_URLCONF = 'config.urls'
 WSGI_APPLICATION = 'config.wsgi.application'
+
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"
