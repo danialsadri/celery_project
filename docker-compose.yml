@@ -95,5 +95,22 @@ services:
       - backend
     restart: always
 
+  celery_stand_alone:
+    container_name: celery_stand_alone
+    image: celery_stand_alone
+    build:
+      context: ./celery_worker/
+      dockerfile: Dockerfile
+    command: sh -c "celery -A celery_base worker -l INFO"
+    volumes:
+      - ./celery_worker:/app
+    environment:
+      - BROKER_URL=redis://redis:6379/0
+      - RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - backend
+    restart: always
+
 volumes:
   database:
