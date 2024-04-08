@@ -72,29 +72,6 @@ services:
       - backend
     restart: always
 
-  celery_beat:
-    container_name: celery_beat
-    image: celery_beat
-    build:
-      context: ./config/
-      dockerfile: Dockerfile
-    command: sh -c "celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
-    volumes:
-      - ./config:/app
-    environment:
-      - SECRET_KEY=test
-      - DEBUG=True
-      - ALLOWED_HOSTS=localhost,127.0.0.1
-      - DATABASE-NAME=postgres
-      - DATABASE-USER=postgres
-      - DATABASE-PASSWORD=postgres
-      - DATABASE-HOST=database
-      - DATABASE-PORT=5432
-    depends_on:
-      - redis
-      - backend
-    restart: always
-
   celery_stand_alone:
     container_name: celery_stand_alone
     image: celery_stand_alone
