@@ -55,7 +55,7 @@ services:
     build:
       context: ./config/
       dockerfile: Dockerfile
-    command: sh -c "celery -A config worker -l INFO"
+    command: sh -c "celery -A config worker -l INFO -Q queue1"
     volumes:
       - ./config:/app
     environment:
@@ -78,7 +78,7 @@ services:
     build:
       context: ./celery_worker/
       dockerfile: Dockerfile
-    command: sh -c "celery -A celery_base worker -l INFO"
+    command: sh -c "celery -A celery_base worker -l INFO -Q queue2"
     volumes:
       - ./celery_worker:/app
     environment:
