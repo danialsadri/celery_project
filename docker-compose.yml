@@ -28,7 +28,7 @@ services:
     depends_on:
       - database
       - redis
-    restart: always
+    restart: on-failure
 
   database:
     container_name: database
@@ -39,7 +39,7 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - database:/var/lib/postgresql/data
-    restart: always
+    restart: on-failure
 
   redis:
     container_name: redis
@@ -47,7 +47,7 @@ services:
     ports:
       - "6379:6379"
     command: sh -c "redis-server --save 60 1 --loglevel warning"
-    restart: always
+    restart: on-failure
 
   celery:
     container_name: celery
@@ -55,7 +55,7 @@ services:
     build:
       context: ./config/
       dockerfile: Dockerfile
-    command: sh -c "celery -A config worker -l INFO -Q queue1"
+    command: sh -c "celery -A config worker -l INFO -Q celery,celery:1,celery:2,celery:3"
     volumes:
       - ./config:/app
     environment:
@@ -70,24 +70,24 @@ services:
     depends_on:
       - redis
       - backend
-    restart: always
+    restart: on-failure
 
-  celery_stand_alone:
-    container_name: celery_stand_alone
-    image: celery_stand_alone
-    build:
-      context: ./celery_worker/
-      dockerfile: Dockerfile
-    command: sh -c "celery -A celery_base worker -l INFO -Q queue2"
-    volumes:
-      - ./celery_worker:/app
-    environment:
-      - BROKER_URL=redis://redis:6379/0
-      - RESULT_BACKEND=redis://redis:6379/0
-    depends_on:
-      - redis
-      - backend
-    restart: always
+#  celery_stand_alone:
+#    container_name: celery_stand_alone
+#    image: celery_stand_alone
+#    build:
+#      context: ./celery_worker/
+#      dockerfile: Dockerfile
+#    command: sh -c "celery -A celery_base worker -l INFO -Q queue2"
+#    volumes:
+#      - ./celery_worker:/app
+#    environment:
+#      - BROKER_URL=redis://redis:6379/0
+#      - RESULT_BACKEND=redis://redis:6379/0
+#    depends_on:
+#      - redis
+#      - backend
+#    restart: on-failure
 
 volumes:
   database:
