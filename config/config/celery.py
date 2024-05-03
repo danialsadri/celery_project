@@ -8,6 +8,7 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 #     'notifications.tasks.send_discount_emails': {'queue': 'queue1'},
 #     'notifications.tasks.process_data_for_machine_learning': {'queue': 'queue2'},
 # }
+# app.conf.task_default_rate_limit = '1/m'
 app.conf.broker_transport_options = {
     'priority_steps': list(range(10)),
     'sep': ':',
