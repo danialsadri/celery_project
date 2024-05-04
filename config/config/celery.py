@@ -26,6 +26,7 @@ app.conf.task_routes = {
     'notifications.tasks.task_3': {'queue': 'default'},
     'notifications.tasks.task_4': {'queue': 'default'},
     'notifications.tasks.send_message': {'queue': 'default'},
+    'notifications.tasks.send_sms': {'queue': 'default'},
 }
 
 app.autodiscover_tasks()

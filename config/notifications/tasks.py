@@ -30,3 +30,9 @@ def task_4():
 def send_message(mobile, message):
     sleep(5)
     return f'sms sent to user with {mobile} number and message was: {message}'
+
+
+@shared_task()
+def send_sms():
+    sleep(5)
+    return 'sms has been sent to user'
