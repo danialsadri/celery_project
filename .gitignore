@@ -62,7 +62,6 @@ crashlytics-build.properties
 fabric.properties
 .idea/httpRequests
 .idea/caches/build_file_checksums.ser
-*.log
 *.pot
 *.pyc
 __pycache__/
@@ -111,7 +110,6 @@ coverage.xml
 cover/
 *.mo
 *.pot
-*.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
