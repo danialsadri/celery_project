@@ -28,6 +28,7 @@ services:
     depends_on:
       - database
       - redis
+      - rabbitmq
     restart: always
 
   database:
@@ -37,6 +38,8 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
     volumes:
       - database:/var/lib/postgresql/data
     restart: always
@@ -49,13 +52,21 @@ services:
     command: sh -c "redis-server --save 60 1 --loglevel warning"
     restart: always
 
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:management
+    ports:
+      - "5673:5672"
+      - "15672:15672"
+    restart: always
+
   celery:
     container_name: celery
     image: celery
     build:
       context: ./config/
       dockerfile: Dockerfile
-    command: sh -c "celery -A config worker -l INFO -Q queue1"
+    command: sh -c "celery -A config worker -l INFO"
     volumes:
       - ./config:/app
     environment:
@@ -70,24 +81,25 @@ services:
     depends_on:
       - redis
       - backend
+      - rabbitmq
     restart: always
 
-  celery_stand_alone:
-    container_name: celery_stand_alone
-    image: celery_stand_alone
-    build:
-      context: ./celery_worker/
-      dockerfile: Dockerfile
-    command: sh -c "celery -A celery_base worker -l INFO -Q queue2"
-    volumes:
-      - ./celery_worker:/app
-    environment:
-      - BROKER_URL=redis://redis:6379/0
-      - RESULT_BACKEND=redis://redis:6379/0
-    depends_on:
-      - redis
-      - backend
-    restart: always
+#  celery_stand_alone:
+#    container_name: celery_stand_alone
+#    image: celery_stand_alone
+#    build:
+#      context: ./celery_worker/
+#      dockerfile: Dockerfile
+#    command: sh -c "celery -A celery_base worker -l INFO -Q queue2"
+#    volumes:
+#      - ./celery_worker:/app
+#    environment:
+#      - BROKER_URL=redis://redis:6379/0
+#      - RESULT_BACKEND=redis://redis:6379/0
+#    depends_on:
+#      - redis
+#      - backend
+#    restart: always
 
 volumes:
   database:
