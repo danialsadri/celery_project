@@ -84,6 +84,14 @@ services:
       - rabbitmq
     restart: always
 
+  flower:
+    container_name: flower
+    image: mher/flower:2.0
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672/
+
 #  celery_stand_alone:
 #    container_name: celery_stand_alone
 #    image: celery_stand_alone
