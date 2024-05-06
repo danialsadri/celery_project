@@ -40,6 +40,7 @@ app.conf.task_routes = {
     'notifications.tasks.task_send_sms.send_sms': {'queue': 'default'},
     'notifications.tasks.task_raise_error.raise_error_1': {'queue': 'default'},
     'notifications.tasks.task_raise_error.raise_error_2': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.raise_error_3': {'queue': 'default'},
 }
 
 app.autodiscover_tasks()
