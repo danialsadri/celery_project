@@ -21,13 +21,13 @@ task_default_exchange = 'default'
 task_default_routing_key = 'default'
 
 app.conf.task_routes = {
-    'notifications.tasks.task_1': {'queue': 'default'},
-    'notifications.tasks.task_2': {'queue': 'default'},
-    'notifications.tasks.task_3': {'queue': 'default'},
-    'notifications.tasks.task_4': {'queue': 'default'},
-    'notifications.tasks.send_message': {'queue': 'default'},
-    'notifications.tasks.send_sms': {'queue': 'default'},
-    'notifications.tasks.raise_error_1': {'queue': 'default'},
+    'notifications.tasks.task_test.task_1': {'queue': 'default'},
+    'notifications.tasks.task_test.task_2': {'queue': 'default'},
+    'notifications.tasks.task_test.task_3': {'queue': 'default'},
+    'notifications.tasks.task_test.task_4': {'queue': 'default'},
+    'notifications.tasks.task_send_message.send_message': {'queue': 'default'},
+    'notifications.tasks.task_send_sms.send_sms': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.raise_error_1': {'queue': 'default'},
 }
 
 app.autodiscover_tasks()
