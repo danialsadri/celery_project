@@ -1,10 +1,21 @@
+import logging
 import os
-from celery import Celery
+from celery import Celery, Task
 from kombu import Exchange, Queue
+
+
+class CustomTask(Task):
+    def on_failure(self, exc, task_id, args, kwargs, einfo):
+        if isinstance(exc, ConnectionError):
+            logging.error('connection error occurred in project')
+        else:
+            print(f'task id: {task_id} got error')
+
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 app = Celery('config')
 app.config_from_object('django.conf:settings', namespace='CELERY')
+app.Task = CustomTask
 
 app.conf.update(
     task_acks_late=True,
@@ -28,6 +39,7 @@ app.conf.task_routes = {
     'notifications.tasks.task_send_message.send_message': {'queue': 'default'},
     'notifications.tasks.task_send_sms.send_sms': {'queue': 'default'},
     'notifications.tasks.task_raise_error.raise_error_1': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.raise_error_2': {'queue': 'default'},
 }
 
 app.autodiscover_tasks()

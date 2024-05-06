@@ -10,3 +10,8 @@ def raise_error_1():
     except Exception:
         logging.error('an exception has been occurred')
         raise ConnectionError('connection error')
+
+
+@shared_task()
+def raise_error_2():
+    raise ConnectionError('connection error')
