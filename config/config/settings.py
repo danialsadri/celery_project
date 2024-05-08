@@ -100,6 +100,12 @@ CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'file': {
             'level': 'WARNING',
@@ -110,7 +116,6 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'WARNING',
             'propagate': True,
         },
     },
