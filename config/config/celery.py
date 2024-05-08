@@ -54,6 +54,8 @@ app.conf.task_routes = {
     # 'notifications.tasks.task_raise_error.process_error_result': {'queue': 'default'},
     # 'notifications.tasks.task_raise_error.my_task': {'queue': 'default'},
     # 'notifications.tasks.task_raise_error.error_handler_task': {'queue': 'default'},
+    'notifications.tasks.schedule_tasks.task_1': {'queue': 'default'},
+    'notifications.tasks.schedule_tasks.task_2': {'queue': 'default'},
 }
 
 app.autodiscover_tasks()
