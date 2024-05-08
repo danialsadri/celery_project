@@ -34,18 +34,20 @@ task_default_exchange = 'default'
 task_default_routing_key = 'default'
 
 app.conf.task_routes = {
-    'notifications.tasks.task_test.task_1': {'queue': 'default'},
-    'notifications.tasks.task_test.task_2': {'queue': 'default'},
-    'notifications.tasks.task_test.task_3': {'queue': 'default'},
-    'notifications.tasks.task_test.task_4': {'queue': 'default'},
-    'notifications.tasks.task_send_message.send_message': {'queue': 'default'},
-    'notifications.tasks.task_send_sms.send_sms': {'queue': 'default'},
-    'notifications.tasks.task_raise_error.raise_error_1': {'queue': 'default'},
-    'notifications.tasks.task_raise_error.raise_error_2': {'queue': 'default'},
-    'notifications.tasks.task_raise_error.raise_error_3': {'queue': 'default'},
+    # 'notifications.tasks.task_test.task_1': {'queue': 'default'},
+    # 'notifications.tasks.task_test.task_2': {'queue': 'default'},
+    # 'notifications.tasks.task_test.task_3': {'queue': 'default'},
+    # 'notifications.tasks.task_test.task_4': {'queue': 'default'},
+    # 'notifications.tasks.task_send_message.send_message': {'queue': 'default'},
+    # 'notifications.tasks.task_send_sms.send_sms': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.raise_error_1': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.raise_error_2': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.raise_error_3': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.send_sms_to_user': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.custom_sum': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.custom_power': {'queue': 'default'},
     'notifications.tasks.task_raise_error.send_sms_to_user': {'queue': 'default'},
-    'notifications.tasks.task_raise_error.custom_sum': {'queue': 'default'},
-    'notifications.tasks.task_raise_error.custom_power': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.handle_errors_in_dead_letter_queue': {'queue': 'dead_letter'},
 }
 
 app.autodiscover_tasks()
