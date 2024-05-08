@@ -1,0 +1,33 @@
+# -----------------------------------------------------------------------------------
+@shared_task()
+def custom_sum(num1, num2):
+    return num1 + num2
+
+
+@shared_task()
+def custom_power(num):
+    if num == 5:
+        raise ValueError('value can not be 5')
+    return num ** 2
+
+
+def run_tasks_chain():
+    task_chain = chain(custom_sum.s(2, 3), custom_power.s())
+    task_chain_result = task_chain.apply_async()
+    task_chain_result.get()
+# -----------------------------------------------------------------------------------
+app.conf.task_routes = {
+    'notifications.tasks.task_test.task_1': {'queue': 'default'},
+    'notifications.tasks.task_test.task_2': {'queue': 'default'},
+    'notifications.tasks.task_test.task_3': {'queue': 'default'},
+    'notifications.tasks.task_test.task_4': {'queue': 'default'},
+    'notifications.tasks.task_send_message.send_message': {'queue': 'default'},
+    'notifications.tasks.task_send_sms.send_sms': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.raise_error_1': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.raise_error_2': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.raise_error_3': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.send_sms_to_user': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.custom_sum': {'queue': 'default'}, #new
+    'notifications.tasks.task_raise_error.custom_power': {'queue': 'default'}, #new
+}
+# -----------------------------------------------------------------------------------

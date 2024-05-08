@@ -1,0 +1,17 @@
+--------------------------------------------------------------------------------------------------------------
+@shared_task(autoretry_for=(ConnectionError,), default_retry_delay=5, retry_kwargs={'max_retries': 5})
+def raise_error_3():
+    raise ConnectionError('connection error........................')
+--------------------------------------------------------------------------------------------------------------
+app.conf.task_routes = {
+    'notifications.tasks.task_test.task_1': {'queue': 'default'},
+    'notifications.tasks.task_test.task_2': {'queue': 'default'},
+    'notifications.tasks.task_test.task_3': {'queue': 'default'},
+    'notifications.tasks.task_test.task_4': {'queue': 'default'},
+    'notifications.tasks.task_send_message.send_message': {'queue': 'default'},
+    'notifications.tasks.task_send_sms.send_sms': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.raise_error_1': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.raise_error_2': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.raise_error_3': {'queue': 'default'}, #new
+}
+--------------------------------------------------------------------------------------------------------------

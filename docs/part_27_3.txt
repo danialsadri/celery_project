@@ -1,0 +1,25 @@
+-------------------------------------------------------------------------
+@shared_task()
+def raise_error_2():
+    raise ConnectionError('connection error')
+-------------------------------------------------------------------------
+app.conf.task_routes = {
+    'notifications.tasks.task_test.task_1': {'queue': 'default'},
+    'notifications.tasks.task_test.task_2': {'queue': 'default'},
+    'notifications.tasks.task_test.task_3': {'queue': 'default'},
+    'notifications.tasks.task_test.task_4': {'queue': 'default'},
+    'notifications.tasks.task_send_message.send_message': {'queue': 'default'},
+    'notifications.tasks.task_send_sms.send_sms': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.raise_error_1': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.raise_error_2': {'queue': 'default'},  #new
+}
+-------------------------------------------------------------------------
+class CustomTask(Task):
+    def on_failure(self, exc, task_id, args, kwargs, einfo):
+        if isinstance(exc, ConnectionError):
+            logging.error('connection error occurred in project')
+        else:
+            print(f'task id: {task_id} got error')
+-------------------------------------------------------------------------
+app.Task = CustomTask
+-------------------------------------------------------------------------

@@ -1,0 +1,23 @@
+-------------------------------------------------------------------------------------------------
+import logging
+from celery import shared_task
+
+@shared_task()
+def raise_error_1():
+    try:
+        print('this is my task')
+        raise ValueError('value is not valid')
+    except Exception:
+        logging.error('an exception has been occurred')
+        raise ConnectionError('connection error')
+-------------------------------------------------------------------------------------------------
+app.conf.task_routes = {
+    'notifications.tasks.task_test.task_1': {'queue': 'default'},
+    'notifications.tasks.task_test.task_2': {'queue': 'default'},
+    'notifications.tasks.task_test.task_3': {'queue': 'default'},
+    'notifications.tasks.task_test.task_4': {'queue': 'default'},
+    'notifications.tasks.task_send_message.send_message': {'queue': 'default'},
+    'notifications.tasks.task_send_sms.send_sms': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.raise_error_1': {'queue': 'default'}, #new
+}
+-------------------------------------------------------------------------------------------------
