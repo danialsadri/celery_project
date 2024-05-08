@@ -24,8 +24,10 @@ app.conf.update(
     worker_concurrency=1)
 
 default_exchange = Exchange(name='default', type='direct')
+dead_letter_exchange = Exchange(name='dead_letter', type='direct')
 app.conf.task_queues = (
     Queue(name='default', exchange=default_exchange, routing_key='default', queue_arguments={'x-max-priority': 10}),
+    Queue(name='dead_letter', exchange=dead_letter_exchange, routing_key='dead_letter'),
 )
 task_default_queue = 'default'
 task_default_exchange = 'default'
