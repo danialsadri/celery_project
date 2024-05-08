@@ -1,6 +1,6 @@
 import logging
 from celery import shared_task, group, chain
-
+from time import sleep
 
 # @shared_task()
 # def raise_error_1():
@@ -112,4 +112,9 @@ from celery import shared_task, group, chain
 #     result_group.get(disable_sync_subtasks=False, propagate=False)
 #     for result in result_group:
 #         handle_result(result)
+# -------------------------------------------------------------------------------------------------------------------------------
+# @shared_task(time_limit=5)
+# def send_email_to_user():
+#     sleep(6)
+#     return "email has been sent to user successfully"
 # -------------------------------------------------------------------------------------------------------------------------------
