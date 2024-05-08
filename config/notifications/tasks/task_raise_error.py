@@ -1,4 +1,6 @@
 import logging
+import sys
+
 from celery import shared_task, group, chain
 from time import sleep
 
@@ -131,4 +133,29 @@ from time import sleep
 #         task_result = result.get(timeout=4)
 #     except TimeoutError:
 #         print('Task timed out')
+# -------------------------------------------------------------------------------------------------------------------------------
+# @shared_task()
+# def my_long_running_task(has_error):
+#     if has_error:
+#         raise ValueError('an error occurred in long running task')
+#     else:
+#         sys.stdout.write('long running task has been done')
+#
+#
+# @shared_task()
+# def process_result(result):
+#     sys.stdout.write('process task result')
+#     sys.stdout.flush()
+#
+#
+# @shared_task()
+# def process_error_result(task_id, exc, traceback):
+#     sys.stdout.write('>>>>>>>>>>>>>>>>>>>')
+#     sys.stdout.write(str(exc))
+#     sys.stdout.write('>>>>>>>>>>>>>>>>>>>')
+#     sys.stdout.flush()
+#
+#
+# def run_task(has_error=False):
+#     my_long_running_task.apply_async(args=[has_error], link=[process_result.s()], link_error=[process_error_result.s()])
 # -------------------------------------------------------------------------------------------------------------------------------

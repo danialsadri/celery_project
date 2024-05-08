@@ -49,6 +49,9 @@ app.conf.task_routes = {
     # 'notifications.tasks.task_raise_error.send_sms_to_user': {'queue': 'default'},
     # 'notifications.tasks.task_raise_error.handle_errors_in_dead_letter_queue': {'queue': 'dead_letter'},
     # 'notifications.tasks.task_raise_error.send_email_to_user': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.my_long_running_task': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.process_result': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.process_error_result': {'queue': 'default'},
 }
 
 app.autodiscover_tasks()

@@ -1,0 +1,47 @@
+------------------------------------------------------------------------------------------------------------------------------------
+@shared_task()
+def my_long_running_task(has_error):
+    if has_error:
+        raise ValueError('an error occurred in long running task')
+    else:
+        sys.stdout.write('long running task has been done')
+
+
+@shared_task()
+def process_result(result):
+    sys.stdout.write('process task result')
+    sys.stdout.flush()
+
+
+@shared_task()
+def process_error_result(task_id, exc, traceback):
+    sys.stdout.write('>>>>>>>>>>>>>>>>>>>')
+    sys.stdout.write(str(exc))
+    sys.stdout.write('>>>>>>>>>>>>>>>>>>>')
+    sys.stdout.flush()
+
+
+def run_task(has_error=False):
+    my_long_running_task.apply_async(args=[has_error], link=[process_result.s()], link_error=[process_error_result.s()])
+------------------------------------------------------------------------------------------------------------------------------------
+app.conf.task_routes = {
+    # 'notifications.tasks.task_test.task_1': {'queue': 'default'},
+    # 'notifications.tasks.task_test.task_2': {'queue': 'default'},
+    # 'notifications.tasks.task_test.task_3': {'queue': 'default'},
+    # 'notifications.tasks.task_test.task_4': {'queue': 'default'},
+    # 'notifications.tasks.task_send_message.send_message': {'queue': 'default'},
+    # 'notifications.tasks.task_send_sms.send_sms': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.raise_error_1': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.raise_error_2': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.raise_error_3': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.send_sms_to_user': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.custom_sum': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.custom_power': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.send_sms_to_user': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.handle_errors_in_dead_letter_queue': {'queue': 'dead_letter'},
+    # 'notifications.tasks.task_raise_error.send_email_to_user': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.my_long_running_task': {'queue': 'default'}, #new
+    'notifications.tasks.task_raise_error.process_result': {'queue': 'default'}, #new
+    'notifications.tasks.task_raise_error.process_error_result': {'queue': 'default'}, #new
+}
+--------------------------------------------------------------------------------------------------------------------------------------
