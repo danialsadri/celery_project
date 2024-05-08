@@ -1,5 +1,5 @@
 import logging
-from celery import shared_task, group
+from celery import shared_task, group, chain
 
 
 @shared_task()
@@ -22,6 +22,7 @@ def raise_error_3():
     raise ConnectionError('connection error........................')
 
 
+# -------------------------------------------------------------------------------------------------------------------------------
 phone_numbers = [
     '09021234567',
     '09125469807',
@@ -47,9 +48,29 @@ def handle_result(result):
         print(f'Task was revoked: {result.id}')
 
 
-def run_tasks():
+def run_tasks_group():
     task_group = group(send_sms_to_user.s(phone_number) for phone_number in phone_numbers)
     result_group = task_group.apply_async()
     result_group.get(disable_sync_subtasks=False, propagate=False)
     for result in result_group:
         handle_result(result)
+
+
+# -------------------------------------------------------------------------------------------------------------------------------
+@shared_task()
+def custom_sum(num1, num2):
+    return num1 + num2
+
+
+@shared_task()
+def custom_power(num):
+    if num == 5:
+        raise ValueError('value can not be 5')
+    return num ** 2
+
+
+def run_tasks_chain():
+    task_chain = chain(custom_sum.s(2, 3), custom_power.s())
+    task_chain_result = task_chain.apply_async()
+    task_chain_result.get()
+# -------------------------------------------------------------------------------------------------------------------------------
