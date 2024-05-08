@@ -2,6 +2,7 @@ import logging
 from celery import shared_task, group, chain
 from time import sleep
 
+
 # @shared_task()
 # def raise_error_1():
 #     try:
@@ -117,4 +118,17 @@ from time import sleep
 # def send_email_to_user():
 #     sleep(6)
 #     return "email has been sent to user successfully"
+# -------------------------------------------------------------------------------------------------------------------------------
+# @shared_task(time_limit=10)
+# def send_email_to_user():
+#     sleep(6)
+#     return "email has been sent to user successfully"
+#
+#
+# def send_email():
+#     result = send_email_to_user.apply_async()
+#     try:
+#         task_result = result.get(timeout=4)
+#     except TimeoutError:
+#         print('Task timed out')
 # -------------------------------------------------------------------------------------------------------------------------------

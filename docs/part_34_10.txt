@@ -1,0 +1,32 @@
+-----------------------------------------------------------------------------------------------
+@shared_task(time_limit=10)
+def send_email_to_user():
+    sleep(6)
+    return "email has been sent to user successfully"
+
+
+def send_email():
+    result = send_email_to_user.apply_async()
+    try:
+        task_result = result.get(timeout=4)
+    except TimeoutError:
+        print('Task timed out')
+-----------------------------------------------------------------------------------------------
+app.conf.task_routes = {
+    # 'notifications.tasks.task_test.task_1': {'queue': 'default'},
+    # 'notifications.tasks.task_test.task_2': {'queue': 'default'},
+    # 'notifications.tasks.task_test.task_3': {'queue': 'default'},
+    # 'notifications.tasks.task_test.task_4': {'queue': 'default'},
+    # 'notifications.tasks.task_send_message.send_message': {'queue': 'default'},
+    # 'notifications.tasks.task_send_sms.send_sms': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.raise_error_1': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.raise_error_2': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.raise_error_3': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.send_sms_to_user': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.custom_sum': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.custom_power': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.send_sms_to_user': {'queue': 'default'},
+    # 'notifications.tasks.task_raise_error.handle_errors_in_dead_letter_queue': {'queue': 'dead_letter'},
+    'notifications.tasks.task_raise_error.send_email_to_user': {'queue': 'default'}, #new
+}
+-----------------------------------------------------------------------------------------------
