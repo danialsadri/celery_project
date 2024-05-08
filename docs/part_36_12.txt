@@ -1,38 +1,22 @@
-import logging
-import os
-from celery import Celery, Task
-from kombu import Exchange, Queue
+------------------------------------------------------------------------------------------------------------------------------------
+@shared_task()
+def my_task():
+    raise ValueError('task failed')
 
 
-class CustomTask(Task):
-    def on_failure(self, exc, task_id, args, kwargs, einfo):
-        if isinstance(exc, ConnectionError):
-            logging.error('connection error occurred in project')
-        else:
-            print(f'task id: {task_id} got error')
+@shared_task()
+def error_handler_task(task_id):
+    sys.stdout.write(f'Task id is {task_id}')
 
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-app = Celery('config')
-app.config_from_object('django.conf:settings', namespace='CELERY')
-app.Task = CustomTask
+@task_failure.connect(sender=my_task)
+def handle_my_task_failure(sender=None, task_id=None, **kwargs):
+    error_handler_task.apply_async(args=[task_id])
 
-app.conf.update(
-    task_acks_late=True,
-    task_default_priority=5,
-    worker_prefetch_multiplier=1,
-    worker_concurrency=1)
 
-default_exchange = Exchange(name='default', type='direct')
-dead_letter_exchange = Exchange(name='dead_letter', type='direct')
-app.conf.task_queues = (
-    Queue(name='default', exchange=default_exchange, routing_key='default', queue_arguments={'x-max-priority': 10}),
-    Queue(name='dead_letter', exchange=dead_letter_exchange, routing_key='dead_letter'),
-)
-task_default_queue = 'default'
-task_default_exchange = 'default'
-task_default_routing_key = 'default'
-
+def run_tasks():
+    my_task.apply_async()
+------------------------------------------------------------------------------------------------------------------------------------
 app.conf.task_routes = {
     # 'notifications.tasks.task_test.task_1': {'queue': 'default'},
     # 'notifications.tasks.task_test.task_2': {'queue': 'default'},
@@ -52,8 +36,7 @@ app.conf.task_routes = {
     # 'notifications.tasks.task_raise_error.my_long_running_task': {'queue': 'default'},
     # 'notifications.tasks.task_raise_error.process_result': {'queue': 'default'},
     # 'notifications.tasks.task_raise_error.process_error_result': {'queue': 'default'},
-    # 'notifications.tasks.task_raise_error.my_task': {'queue': 'default'},
-    # 'notifications.tasks.task_raise_error.error_handler_task': {'queue': 'default'},
+    'notifications.tasks.task_raise_error.my_task': {'queue': 'default'}, #new
+    'notifications.tasks.task_raise_error.error_handler_task': {'queue': 'default'}, #new
 }
-
-app.autodiscover_tasks()
+------------------------------------------------------------------------------------------------------------------------------------

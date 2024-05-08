@@ -1,6 +1,6 @@
 import logging
 import sys
-
+from celery.signals import task_failure
 from celery import shared_task, group, chain
 from time import sleep
 
@@ -158,4 +158,22 @@ from time import sleep
 #
 # def run_task(has_error=False):
 #     my_long_running_task.apply_async(args=[has_error], link=[process_result.s()], link_error=[process_error_result.s()])
+# -------------------------------------------------------------------------------------------------------------------------------
+# @shared_task()
+# def my_task():
+#     raise ValueError('task failed')
+#
+#
+# @shared_task()
+# def error_handler_task(task_id):
+#     sys.stdout.write(f'Task id is {task_id}')
+#
+#
+# @task_failure.connect(sender=my_task)
+# def handle_my_task_failure(sender=None, task_id=None, **kwargs):
+#     error_handler_task.apply_async(args=[task_id])
+#
+#
+# def run_tasks():
+#     my_task.apply_async()
 # -------------------------------------------------------------------------------------------------------------------------------
